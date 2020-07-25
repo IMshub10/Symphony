@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "798920460362",
+    "firebase_url": "https://symphony-c3544.firebaseio.com",
+    "project_id": "symphony-c3544",
+    "storage_bucket": "symphony-c3544.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:798920460362:android:365671853da05604e2beb3",
+        "android_client_info": {
+          "package_name": "com.example.symphony"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "798920460362-f1h25b77hojp6k50i7eprglg60u69fqv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAAFayFR4eWF_uCa8TS3mAnbfsAk4arM1k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "798920460362-f1h25b77hojp6k50i7eprglg60u69fqv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

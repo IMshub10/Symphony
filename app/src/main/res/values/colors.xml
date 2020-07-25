@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#404040</color>
+    <color name="colorPrimaryDark">#2E2C2C</color>
+    <color name="colorAccent">#7DBBFF</color>
+    <color name="white">#ffffff</color>
+    <color name="text_color">#C8C8C8</color>
+    <color name="text_charcoal">#333333</color>
+    <color name="black50">#80000000</color>
+    <color name="primary_text">#212121</color>
+    <color name="multiselect_done">#388e3c</color>
+    <color name="error_text">#b71c1c</color>
+</resources>

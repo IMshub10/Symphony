@@ -1,0 +1,32 @@
+<resources>
+    <string name="app_name">Symphony</string>
+    <string name="tab_text_1">Tab 1</string>
+    <string name="tab_text_2">Tab 2</string>
+
+    <string name="_91">+91</string>
+    <string name="phone_number">Phone Number</string>
+    <string name="send_otp">Send OTP</string>
+    <string name="enter_otp_here">Enter OTP here</string>
+    <string name="sign_in_with_your_phone_number.">Sign in with your Phone Number.</string>
+    <string name="collab_will_send_otp_to_verify_your_phone_number_enter_country_code_and_phone_number">Symphony will send OTP to verify your phone number. \nEnter country code and Phone number.</string>
+    <string name="verify">Verify</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="sign_in">Sign In</string>
+    <string name="this_name_is_temporary">The text you provide will be visible to those who dont have your number.</string>
+    <string name="the_name_you_love">The name you love!</string>
+
+    <string name="imagepicker_multiselect_done">Done</string>
+    <string name="imagepicker_multiselect_not_enough_singular">You have to select 1 more image</string>
+    <string name="imagepicker_multiselect_not_enough_plural">You have to select %d more images</string>
+    <string name="imagepicker_multiselect_enough_singular">You have selected 1 image</string>
+    <string name="imagepicker_multiselect_enough_plural">You have selected %d images</string>
+    <string name="imagepicker_multiselect_overselect">You cannot select more than %d images</string>
+    <string name="imagepicker_gallery_intent_title">Select Multiple Images</string>
+    <string name="imagepicker_no_image_text_view">There are no image in your device.</string>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="add_widget">Add widget</string>
+    <string name="shubham_meher">Shubham Meher</string>
+    <string name="referesh">Referesh</string>
+
+</resources>
