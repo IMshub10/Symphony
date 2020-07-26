@@ -9,7 +9,8 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:elevation="0dp"
-        tools:listitem="@layout/groups_contacts_listitem"
+        android:id="@+id/chat_frag_recyclerview"
+        tools:listitem="@layout/chat_fragment_recyclerview_item"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 

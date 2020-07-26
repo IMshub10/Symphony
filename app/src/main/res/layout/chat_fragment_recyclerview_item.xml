@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/listitem"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingLeft="8dp">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/image"
+        android:layout_width="65dp"
+        android:layout_height="65dp"
+        android:padding="8dp"
+        android:src="@mipmap/ic_launcher_round" />
+
+
+    <RelativeLayout
+        android:id="@+id/relay"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="65dp">
+
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="11dp"
+            android:padding="0dp"
+            android:text="Backbenchers"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/message"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/name"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="5dp"
+            android:ellipsize="end"
+            android:maxWidth="250dp"
+            android:maxLines="1"
+            android:padding="0dp"
+            android:text="Hi Hello bonjour konichiwa"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/no"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/time"
+            android:layout_alignParentEnd="@bool/enable_system_foreground_service_default"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="20dp"
+            android:background="@drawable/circular_textview"
+            android:paddingLeft="2dp"
+            android:paddingRight="1dp"
+            android:text="  1  "
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="@bool/enable_system_foreground_service_default"
+            android:layout_marginTop="11dp"
+            android:layout_marginEnd="20dp"
+            android:padding="0dp"
+            android:text="12:20 pm"
+            android:textSize="12sp" />
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginLeft="33dp"
+        android:alpha="0.3"
+        android:background="@color/colorAccent" />
+
+</RelativeLayout>

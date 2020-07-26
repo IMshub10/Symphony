@@ -22,6 +22,23 @@ class MyContactsRepository(application: Application?) {
     suspend fun update(myContacts: MyContacts){
         myContactsDao.update(myContacts)
     }
+    suspend fun updateContact(askey: String?,
+                              lastMess: String?,
+                              createDate: String?,
+                              timestam: String?){
+        myContactsDao.updateContact(askey,lastMess,createDate,timestam)
+    }
+    suspend fun updateMember(askey: String?,
+                              lastMess: String?,
+                             messageCount: Int,
+                              createDate: String?,
+                              timestam: String?){
+        myContactsDao.updateMember(askey,lastMess, messageCount,createDate,timestam)
+    }
+    suspend fun updateMemberMessage(askey: String?,
+                             messageCount: Int){
+        myContactsDao.updateMemberMessage(askey, messageCount)
+    }
     suspend fun delete(myContacts: MyContacts){
         myContactsDao.delete(myContacts)
     }
@@ -30,5 +47,8 @@ class MyContactsRepository(application: Application?) {
     }
      fun getAllMyContacts():LiveData<List<MyContacts>>{
         return myContactsDao.getAllMyContacts()
+    }
+    fun getContactsForChatFragment(check:String):LiveData<List<MyContacts>>{
+        return myContactsDao.getContactsForChatFragment(check)
     }
 }

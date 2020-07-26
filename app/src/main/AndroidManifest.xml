@@ -55,6 +55,7 @@
                 android:resource="@xml/file_paths" />
         </provider>
         <service android:name=".Services.FirebaseService"/>
+        <receiver android:name=".Services.NotificationReceiver"/>
     </application>
 
 </manifest>

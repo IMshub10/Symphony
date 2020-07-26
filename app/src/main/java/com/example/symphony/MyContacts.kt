@@ -17,6 +17,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.SimpleItemAnimator
 import com.example.symphony.Adapters.MyContactsAdapter
 import com.example.symphony.Models.ContactExists
 import com.example.symphony.Room.Model.MyContacts
@@ -51,6 +52,8 @@ class MyContacts : AppCompatActivity() {
         recyclerView!!.adapter = myContactsAdapter
         recyclerView!!.layoutManager = LinearLayoutManager(this)
         recyclerView!!.setHasFixedSize(true)
+        (recyclerView!!.itemAnimator as SimpleItemAnimator).supportsChangeAnimations =
+            false
         //MyContacts View Model Initialization
         myContactsViewModel = ViewModelProvider.AndroidViewModelFactory(application)
             .create(MyContactsViewModel::class.java)

@@ -4,20 +4,25 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager.widget.ViewPager
+import com.bumptech.glide.Glide
 import com.example.symphony.Services.FirebaseService
 import com.example.symphony.Services.LocalUserService
 import com.example.symphony.ui.Main.SectionsPagerAdapter
+import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayout.OnTabSelectedListener
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import de.hdodenhof.circleimageview.CircleImageView
 
 class MainActivity : AppCompatActivity() {
 
     var mAuth: FirebaseAuth? = null
     var currentUser: FirebaseUser? = null
+    var my_profile_image:CircleImageView? = null
+    var collapsingToolbarLayout:CollapsingToolbarLayout? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,7 +33,14 @@ class MainActivity : AppCompatActivity() {
         val tabs: TabLayout = findViewById(R.id.tabs)
         tabs.setupWithViewPager(viewPager)
         val fab: FloatingActionButton = findViewById(R.id.fab)
-
+        collapsingToolbarLayout = findViewById(R.id.collapsing_toolbar)
+        val view = collapsingToolbarLayout!!.rootView
+        my_profile_image = view.findViewById(R.id.my_profile_image)
+        Glide.with(this)
+            .asBitmap()
+            .error(R.drawable.no_profile)
+            .load(LocalUserService.getLocalUserFromPreferences(this).ImageUrl)
+            .into(my_profile_image!!)
         mAuth = FirebaseAuth.getInstance()
         currentUser = mAuth!!.currentUser
         tabs.addOnTabSelectedListener(object : OnTabSelectedListener {
@@ -66,6 +78,7 @@ class MainActivity : AppCompatActivity() {
         serviceIntent.putExtra("MyName",LocalUserService.getLocalUserFromPreferences(this).Name)
         serviceIntent.putExtra("MyKey",LocalUserService.getLocalUserFromPreferences(this).Key)
         startService(serviceIntent)
+
     }
 
     override fun onBackPressed() {

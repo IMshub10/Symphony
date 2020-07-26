@@ -103,4 +103,9 @@ public class ChatMessageAdapter extends ListAdapter<ChatMessage, ChatMessageAdap
             chat_item = itemView.findViewById(R.id.chat_item);
         }
     }
+
+    @Override
+    public void onViewAttachedToWindow(@NonNull ChatHolder holder) {
+        super.onViewAttachedToWindow(holder);
+    }
 }

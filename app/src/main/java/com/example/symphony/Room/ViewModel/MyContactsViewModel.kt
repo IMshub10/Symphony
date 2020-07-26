@@ -28,7 +28,29 @@ class MyContactsViewModel(application: Application) : AndroidViewModel(applicati
             myContactsRepository!!.update(myContacts)
         }
     }
-
+    fun  updateContact(askey: String?,
+                       lastMess: String?,
+                       createDate: String?,
+                       timestam: String?) {
+        CoroutineScope(IO).launch {
+            myContactsRepository!!.updateContact(askey,lastMess,createDate,timestam)
+        }
+    }
+    fun   updateMember(askey: String?,
+                       lastMess: String?,
+                       messageCount: Int,
+                       createDate: String?,
+                       timestam: String?) {
+        CoroutineScope(IO).launch {
+            myContactsRepository!!.updateMember(askey,lastMess,messageCount,createDate,timestam)
+        }
+    }
+    fun   updateMemberMessage(askey: String?,
+                       messageCount: Int) {
+        CoroutineScope(IO).launch {
+            myContactsRepository!!.updateMemberMessage(askey,messageCount)
+        }
+    }
     fun delete(myContacts: MyContacts) {
         CoroutineScope(IO).launch {
             myContactsRepository!!.delete(myContacts)
@@ -43,5 +65,9 @@ class MyContactsViewModel(application: Application) : AndroidViewModel(applicati
 
     fun getAllMyContacts(): LiveData<List<MyContacts>> {
         return myContactsRepository!!.getAllMyContacts()
+    }
+
+    fun getContactsForChatFragment(check:String):LiveData<List<MyContacts>>{
+        return myContactsRepository!!.getContactsForChatFragment(check)
     }
 }

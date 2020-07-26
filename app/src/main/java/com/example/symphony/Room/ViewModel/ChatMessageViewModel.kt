@@ -41,7 +41,7 @@ class ChatMessageViewModel(application: Application) : AndroidViewModel(applicat
         }
     }
 
-    fun getAllChatMessages(): LiveData<List<ChatMessage>> {
-        return chaMessRepository!!.getAllMyChatmessages()
+    fun getAllChatMessages(receiverKey:String,senderKey:String): LiveData<List<ChatMessage>> {
+        return chaMessRepository!!.getAllMyChatmessages(receiverKey,senderKey)
     }
 }

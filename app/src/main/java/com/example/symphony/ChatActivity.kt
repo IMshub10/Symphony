@@ -8,10 +8,12 @@ import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.SimpleItemAnimator
 import com.bumptech.glide.Glide
 import com.example.symphony.Adapters.ChatMessageAdapter
 import com.example.symphony.Room.Model.ChatMessage
 import com.example.symphony.Room.ViewModel.ChatMessageViewModel
+import com.example.symphony.Room.ViewModel.MyContactsViewModel
 import com.example.symphony.Services.LocalUserService
 import com.example.symphony.Services.Tools
 import com.google.firebase.database.FirebaseDatabase
@@ -35,6 +37,7 @@ class ChatActivity : AppCompatActivity() {
     var prof_image: CircleImageView? = null
     var prof_text: TextView? = null
     var chatMessageViewModel: ChatMessageViewModel? = null
+    var myContactsViewModel: MyContactsViewModel? = null
     var text_edit: EditText? = null
     var send_message: ImageButton? = null
     var My_Name: String? = null
@@ -67,6 +70,7 @@ class ChatActivity : AppCompatActivity() {
 
         //Recyclerview
         chat_recyclerview = findViewById(R.id.chat_recyclerview)
+        chat_recyclerview!!.isNestedScrollingEnabled = false
     }
 
     fun SetViews() {
@@ -81,11 +85,19 @@ class ChatActivity : AppCompatActivity() {
     fun InitialzeAdapterANDViewModels() {
         chatMessageViewModel = ViewModelProvider.AndroidViewModelFactory(application)
             .create(ChatMessageViewModel::class.java)
+        myContactsViewModel = ViewModelProvider.AndroidViewModelFactory(application)
+            .create(MyContactsViewModel::class.java)
 
         //Recycler View
+
+        (chat_recyclerview!!.itemAnimator as SimpleItemAnimator).supportsChangeAnimations =
+            false
+
         chatMessageAdapter = ChatMessageAdapter(this, My_Key)
         chat_recyclerview!!.adapter = chatMessageAdapter
-        chat_recyclerview!!.layoutManager = LinearLayoutManager(this)
+        val linearLayoutManager=LinearLayoutManager(this)
+        linearLayoutManager.stackFromEnd=true
+        chat_recyclerview!!.layoutManager = linearLayoutManager
         chat_recyclerview!!.setHasFixedSize(true)
     }
 
@@ -98,19 +110,24 @@ class ChatActivity : AppCompatActivity() {
         Listeners()
 
         //Observers
-        chatMessageViewModel!!.getAllChatMessages()
+        chatMessageViewModel!!.getAllChatMessages(Friend_Key!!,My_Key!!)
             .observe(this, androidx.lifecycle.Observer { listChatMessages ->
                 chatMessageAdapter!!.submitList(listChatMessages)
+                chat_recyclerview!!.smoothScrollToPosition(chatMessageAdapter!!.itemCount)
             })
     }
 
     fun Listeners() {
-
+        toolbar_navigation!!.setOnClickListener {
+            onBackPressed()
+        }
         send_message!!.setOnClickListener {
             if (text_edit!!.text.trim().isNotEmpty()) {
                 if (Tools.isNetworkAvailable(this@ChatActivity)) {
+                    val nessage = text_edit!!.text.toString().trim()
+                    text_edit!!.setText("")
                     CoroutineScope(Dispatchers.IO).launch {
-                        CreateMessage(text_edit!!.text.toString().trim())
+                        CreateMessage(nessage)
                     }
                 } else {
                     Toast.makeText(this@ChatActivity, "Network not available", Toast.LENGTH_SHORT)
@@ -125,6 +142,7 @@ class ChatActivity : AppCompatActivity() {
     }
 
     suspend fun CreateMessage(text: String) {
+
         val timestamp =
             SimpleDateFormat("yyyyMMddHHmmss").format(Date())
         val createDate =
@@ -143,6 +161,7 @@ class ChatActivity : AppCompatActivity() {
                 timestamp, 1
             )
         )
+        myContactsViewModel!!.updateMember(Friend_Key, text, 0, createDate, timestamp)
         val hashMap: HashMap<String?, String?> = HashMap()
         hashMap.put("Key", uniqueId)
         hashMap.put("SenderKey", My_Key)
@@ -153,11 +172,18 @@ class ChatActivity : AppCompatActivity() {
         hashMap.put("Message", text)
         hashMap.put("Timestamp", timestamp)
         FirebaseDatabase.getInstance().getReference().child("Users").child(Friend_Key!!)
-            .child("Personal Chats").child(uniqueId).setValue(hashMap);
+            .child("Personal Chats").child(uniqueId).setValue(hashMap)
     }
 
     override fun onStart() {
         super.onStart()
         SetViews()
+        myContactsViewModel!!.updateMemberMessage(Friend_Key,0)
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        myContactsViewModel!!.updateMemberMessage(Friend_Key,0)
+
     }
 }

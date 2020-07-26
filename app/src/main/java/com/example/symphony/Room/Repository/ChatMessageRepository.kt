@@ -28,7 +28,7 @@ class ChatMessageRepository(application: Application) {
     suspend fun deleteAll(){
         chatMessageDao.deleteAllMyChatMessages()
     }
-    fun getAllMyChatmessages(): LiveData<List<ChatMessage>> {
-        return chatMessageDao.getAllMyChatMessages()
+    fun getAllMyChatmessages(receiverKey:String,senderKey:String): LiveData<List<ChatMessage>> {
+        return chatMessageDao.getAllMyChatMessages(receiverKey,senderKey)
     }
 }
