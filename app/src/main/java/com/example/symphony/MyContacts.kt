@@ -22,6 +22,7 @@ import com.example.symphony.Adapters.MyContactsAdapter
 import com.example.symphony.Models.ContactExists
 import com.example.symphony.Room.Model.MyContacts
 import com.example.symphony.Room.ViewModel.MyContactsViewModel
+import com.example.symphony.Services.LocalUserService
 import com.example.symphony.Services.Tools
 import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DataSnapshot
@@ -126,19 +127,21 @@ class MyContacts : AppCompatActivity() {
                             snapshot.child("Phone Number").getValue().toString()
                         )
                         if (contactExists.exists) {
-                            myContactsViewModel!!.insert(
-                                MyContacts(
-                                    snapshot.key!!,
-                                    contactExists.names,
-                                    snapshot.child("Name").getValue().toString(),
-                                    snapshot.child("Phone Number").getValue().toString(),
-                                    snapshot.child("Profile Image").getValue().toString(),
-                                    "",
-                                    "",
-                                    0,
-                                    "", 1
+                            if ( snapshot.key!! != LocalUserService.getLocalUserFromPreferences(this@MyContacts).Key) {
+                                myContactsViewModel!!.insert(
+                                    MyContacts(
+                                        snapshot.key!!,
+                                        contactExists.names,
+                                        snapshot.child("Name").getValue().toString(),
+                                        snapshot.child("Phone Number").getValue().toString(),
+                                        snapshot.child("Profile Image").getValue().toString(),
+                                        "",
+                                        "",
+                                        0,
+                                        "", 1
+                                    )
                                 )
-                            )
+                            }
                         }
                     }
 

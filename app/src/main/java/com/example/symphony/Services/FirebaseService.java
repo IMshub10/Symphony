@@ -26,6 +26,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.Objects;
+import java.util.Random;
 
 public class FirebaseService extends Service {
     private static final String CHANNEL_1_ID = "channel1";
@@ -43,13 +44,15 @@ public class FirebaseService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(getApplicationContext());
+
         String My_Name = intent.getStringExtra("MyName");
         String My_Key = intent.getStringExtra("MyKey");
         Intent notificationIntent = new Intent(this, MainActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
         Intent broadCastIntent = new Intent(this, NotificationReceiver.class);
         PendingIntent actionIntent = PendingIntent.getBroadcast(this, 0, broadCastIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        Notification notification = new androidx.core.app.NotificationCompat.Builder(getApplicationContext(), CHANNEL_1_ID)
+        Notification notification = new NotificationCompat.Builder(getApplicationContext(), CHANNEL_1_ID)
                 .setSmallIcon(R.drawable.common_full_open_on_phone)
                 .setContentTitle("Messaging Service")
                 .setCategory(NotificationCompat.CATEGORY_PROGRESS)
@@ -86,6 +89,17 @@ public class FirebaseService extends Service {
                                     Uri notificationRing = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
                                     Ringtone r = RingtoneManager.getRingtone(getApplicationContext(), notificationRing);
                                     r.play();
+                                    Notification notification1 = new NotificationCompat.Builder(getApplicationContext(), CHANNEL_2_ID)
+                                            .setSmallIcon(R.drawable.ic_baseline_photo_camera_24)
+                                            .setContentTitle("New Message From " + Objects.requireNonNull(snapshot.child("SenderName").getValue()).toString())
+                                            .setContentText(Objects.requireNonNull(snapshot.child("Message").getValue()).toString())
+                                            .setContentIntent(pendingIntent)
+                                            .setAutoCancel(true)
+                                            .setCategory(NotificationCompat.CATEGORY_MESSAGE)
+                                            .setGroup("ChatMessage")
+                                            .build();
+
+                                    notificationManagerCompat.notify(2, notification1);
                                 } catch (Exception e) {
                                     e.printStackTrace();
                                 }
