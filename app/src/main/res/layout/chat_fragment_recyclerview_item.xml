@@ -73,7 +73,8 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
-        android:layout_alignParentBottom="true"
+        android:layout_below="@id/relay"
+        android:layout_marginTop="5dp"
         android:layout_marginLeft="33dp"
         android:alpha="0.3"
         android:background="@color/colorAccent" />

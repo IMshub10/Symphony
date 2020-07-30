@@ -28,5 +28,10 @@
     <string name="add_widget">Add widget</string>
     <string name="shubham_meher">Shubham Meher</string>
     <string name="referesh">Referesh</string>
+    <string name="add_a_caption">Add a caption...</string>
+    <string name="backbenchers">Backbenchers</string>
+    <string name="hi_hello_bonjour_konichiwa">Hi Hello bonjour konichiwa</string>
+    <string name="recent_updates">Recent updates</string>
+    <string name="viewed_updates">Viewed updates</string>
 
 </resources>

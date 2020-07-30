@@ -1,14 +1,92 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Fragments.status_fragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <RelativeLayout
+        android:layout_marginBottom="3dp"
+        android:layout_marginTop="3dp"
+        android:id="@+id/temp"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="wrap_content">
+        <RelativeLayout
+            android:id="@+id/my_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <FrameLayout
+                android:id="@+id/my_status_frame"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
 
-</FrameLayout>
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/my_status_image"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_marginStart="18dp"
+                    android:background="@drawable/seen_status_image_indicator"
+                    android:padding="2dp"
+                    android:src="#6d6d6d" />
+
+                <ImageView
+                    android:id="@+id/plus"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_gravity="end|bottom"
+                    android:layout_margin="1dp"
+                    android:src="@drawable/ic_baseline_add_circle_24" />
+            </FrameLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="5dp"
+                android:layout_toEndOf="@+id/my_status_frame"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/my_status_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:text="My Status"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/my_status_time_textView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:text="Tap to add status update"
+                    android:textSize="16sp" />
+
+            </LinearLayout>
+        </RelativeLayout>
+
+
+        <ImageView
+            android:id="@+id/delete_my_status"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentEnd="true"
+            android:layout_margin="15dp"
+            android:src="@drawable/ic_baseline_delete_24" />
+
+    </RelativeLayout>
+    <View
+        android:layout_below="@id/temp"
+        android:id="@+id/separator"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:alpha="0.3"
+        android:background="@color/colorAccent"
+        android:layout_marginStart="46dp"/>
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView_unseen_status_frag"
+        android:layout_below="@id/separator"
+        android:layout_width="match_parent"
+        tools:listitem="@layout/parent_recycler_view_item"
+        android:layout_height="match_parent" />
+</RelativeLayout>

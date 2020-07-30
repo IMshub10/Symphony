@@ -18,8 +18,10 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager.widget.ViewPager
 import com.bumptech.glide.Glide
 import com.example.symphony.Models.ContactExists
+import com.example.symphony.Room.Model.Status
 import com.example.symphony.Room.ViewModel.ChatMessageViewModel
 import com.example.symphony.Room.ViewModel.MyContactsViewModel
+import com.example.symphony.Room.ViewModel.StatusViewModel
 import com.example.symphony.Services.FirebaseService
 import com.example.symphony.Services.LocalUserService
 import com.example.symphony.Services.Tools
@@ -38,20 +40,35 @@ import com.google.firebase.database.FirebaseDatabase
 import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
     val PERMISSION_READ_CONTACTS = 1
     var mAuth: FirebaseAuth? = null
     var currentUser: FirebaseUser? = null
-    var my_profile_image:CircleImageView? = null
-    var collapsingToolbarLayout:CollapsingToolbarLayout? = null
-    var myContactsViewModel:MyContactsViewModel? = null
-    var chaViewModel:ChatMessageViewModel? = null
+    var my_profile_image: CircleImageView? = null
+    var collapsingToolbarLayout: CollapsingToolbarLayout? = null
+    var myContactsViewModel: MyContactsViewModel? = null
+    var chaViewModel: ChatMessageViewModel? = null
+    var statusViewModel: StatusViewModel? = null
     var main_toolbar: androidx.appcompat.widget.Toolbar? = null
+    var My_Key: String? = null
+    var My_Phone: String? = null
+    var My_Name: String? = null
+    private lateinit var job: Job
+
+
+    fun SetViews() {
+        My_Key = LocalUserService.getLocalUserFromPreferences(this).Key
+        My_Phone = LocalUserService.getLocalUserFromPreferences(this).Phone
+        My_Name = LocalUserService.getLocalUserFromPreferences(this).Phone
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        SetViews()
         main_toolbar = findViewById(R.id.main_toolbar)
         setSupportActionBar(main_toolbar)
         supportActionBar!!.setDisplayHomeAsUpEnabled(false)
@@ -73,11 +90,11 @@ class MainActivity : AppCompatActivity() {
         currentUser = mAuth!!.currentUser
         tabs.addOnTabSelectedListener(object : OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab) {
-                if (tab.position==0){
+                if (tab.position == 0) {
                     fab.setImageResource(R.drawable.ic_baseline_email_24)
                     //Toast.makeText(this@MainActivity,"Chat Fragment Open",Toast.LENGTH_SHORT).show()
-                }else if (tab.position==1){
-                   // Toast.makeText(this@MainActivity,"Status Fragment Open",Toast.LENGTH_SHORT).show()
+                } else if (tab.position == 1) {
+                    // Toast.makeText(this@MainActivity,"Status Fragment Open",Toast.LENGTH_SHORT).show()
                     fab.setImageResource(R.drawable.picker_icon_camera)
                 }
             }
@@ -86,23 +103,35 @@ class MainActivity : AppCompatActivity() {
             override fun onTabReselected(tab: TabLayout.Tab) {}
         })
         fab.setOnClickListener { view ->
-            if (tabs.selectedTabPosition==0) {
+            if (tabs.selectedTabPosition == 0) {
                 val intent1 = Intent(this, MyContacts::class.java)
                 startActivity(intent1)
-            }else if (tabs.selectedTabPosition==1) {
-                Snackbar.make(view, "Status Fragment Open", Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show()
+            } else if (tabs.selectedTabPosition == 1) {
+                val intent1 = Intent(this, CreateStatus::class.java)
+                startActivity(intent1)
             }
         }
-        myContactsViewModel = ViewModelProvider.AndroidViewModelFactory(application).create(MyContactsViewModel::class.java)
-        chaViewModel = ViewModelProvider.AndroidViewModelFactory(application).create(ChatMessageViewModel::class.java)
+        myContactsViewModel = ViewModelProvider.AndroidViewModelFactory(application)
+            .create(MyContactsViewModel::class.java)
+        chaViewModel = ViewModelProvider.AndroidViewModelFactory(application)
+            .create(ChatMessageViewModel::class.java)
+        statusViewModel = ViewModelProvider.AndroidViewModelFactory(application)
+            .create(StatusViewModel::class.java)
+        startServing()
+        getStatus()
+    }
 
+    fun startServing() {
+        val serviceIntent = Intent(this, FirebaseService::class.java)
+        serviceIntent.putExtra("MyName", LocalUserService.getLocalUserFromPreferences(this).Name)
+        serviceIntent.putExtra("MyKey", LocalUserService.getLocalUserFromPreferences(this).Key)
+        startService(serviceIntent)
     }
 
     override fun onStart() {
         super.onStart()
         if (currentUser == null) {
-            val intent1: Intent = Intent(this, SignIn::class.java)
+            val intent1 = Intent(this, SignIn::class.java)
             startActivity(intent1)
         }
         if (ContextCompat.checkSelfPermission(
@@ -117,16 +146,13 @@ class MainActivity : AppCompatActivity() {
         } else {
             if (Tools.isNetworkAvailable(this)) {
                 insertContacts()
-            }else{
-                Toast.makeText(this,"Network not available", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(this, "Network not available", Toast.LENGTH_SHORT).show()
             }
         }
-        val nManager:NotificationManager = this.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        val nManager: NotificationManager =
+            this.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         nManager.cancel(2)
-        val serviceIntent=Intent(this,FirebaseService::class.java)
-        serviceIntent.putExtra("MyName",LocalUserService.getLocalUserFromPreferences(this).Name)
-        serviceIntent.putExtra("MyKey",LocalUserService.getLocalUserFromPreferences(this).Key)
-        startService(serviceIntent)
 
     }
 
@@ -147,8 +173,8 @@ class MainActivity : AppCompatActivity() {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 if (Tools.isNetworkAvailable(this)) {
                     insertContacts()
-                }else{
-                    Toast.makeText(this,"Network not available",Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(this, "Network not available", Toast.LENGTH_SHORT).show()
                 }
             }
         }
@@ -164,7 +190,7 @@ class MainActivity : AppCompatActivity() {
                             snapshot.child("Phone Number").getValue().toString()
                         )
                         if (contactExists.exists) {
-                            if ( snapshot.key!! != LocalUserService.getLocalUserFromPreferences(this@MainActivity).Key) {
+                            if (snapshot.key!! != My_Key) {
                                 myContactsViewModel!!.insert(
                                     com.example.symphony.Room.Model.MyContacts(
                                         snapshot.key!!,
@@ -237,16 +263,93 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId==R.id.log_out){
+        if (item.itemId == R.id.log_out) {
             LocalUserService.deleteLocalUserFromPreferences(this)
             myContactsViewModel!!.deleteAllMyContacts()
-           // evenn user logs out store his old chats chaViewModel!!.deleteAlChatMessages()
+            statusViewModel!!.deleteAllStatus()
+            // evenn user logs out store his old chats chaViewModel!!.deleteAlChatMessages()
             FirebaseAuth.getInstance().signOut()
-            val serviceIntent=Intent(this,FirebaseService::class.java)
+            val serviceIntent = Intent(this, FirebaseService::class.java)
             stopService(serviceIntent)
-            val intent = Intent(this,SignIn::class.java)
+            val intent = Intent(this, SignIn::class.java)
             startActivity(intent)
         }
         return true
+    }
+
+    fun getStatus() {
+        job = Job()
+        CoroutineScope(Dispatchers.IO + job).launch {
+            FirebaseDatabase.getInstance().getReference().child("Status")
+                .addChildEventListener(object : ChildEventListener {
+                    override fun onCancelled(error: DatabaseError) {
+
+                    }
+
+                    override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {
+
+                    }
+
+                    override fun onChildChanged(
+                        snapshot: DataSnapshot,
+                        previousChildName: String?
+                    ) {
+                        if (My_Phone != snapshot.child("Creator_Phone").value.toString()) {
+                            val contactExists: ContactExists = contactExistsFun(
+                                this@MainActivity,
+                                snapshot.child("Creator_Phone").getValue().toString()
+                            )
+                            if (contactExists.exists) {
+                                statusViewModel!!.update(
+                                    Status(
+                                        snapshot.key!!,
+                                        contactExists.names,
+                                        snapshot.child("Creator_Phone").value.toString(),
+                                        snapshot.child("Status_Image_Url").value.toString(),
+                                        snapshot.child("Message").value.toString(),
+                                        snapshot.child("Create_Date").value.toString(),
+                                        false
+                                    )
+                                )
+                            }
+                        }
+                    }
+
+                    override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
+                        if (My_Phone != snapshot.child("Creator_Phone").value.toString()) {
+                            val contactExists: ContactExists = contactExistsFun(
+                                this@MainActivity,
+                                snapshot.child("Creator_Phone").getValue().toString()
+                            )
+                            if (contactExists.exists) {
+                                statusViewModel!!.insert(
+                                    Status(
+                                        snapshot.key!!,
+                                        contactExists.names,
+                                        snapshot.child("Creator_Phone").value.toString(),
+                                        snapshot.child("Status_Image_Url").value.toString(),
+                                        snapshot.child("Message").value.toString(),
+                                        snapshot.child("Create_Date").value.toString(),
+                                        false
+                                    )
+                                )
+                            }
+                        }
+                    }
+
+                    override fun onChildRemoved(snapshot: DataSnapshot) {
+                        if (My_Phone != snapshot.child("Creator_Phone").value.toString()) {
+                            val contactExists: ContactExists = contactExistsFun(
+                                this@MainActivity,
+                                snapshot.child("Creator_Phone").value.toString()
+                            )
+                            if (contactExists.exists) {
+                                statusViewModel!!.deleteByKey(snapshot.key!!)
+                            }
+                        }
+                    }
+
+                })
+        }
     }
 }

@@ -66,6 +66,12 @@ class MyContactsViewModel(application: Application) : AndroidViewModel(applicati
     fun getAllMyContacts(): LiveData<List<MyContacts>> {
         return myContactsRepository!!.getAllMyContacts()
     }
+    fun getFriendContact(key:String): LiveData<MyContacts> {
+        return myContactsRepository!!.getFriendContact(key)
+    }
+    fun contactsCount():LiveData<Int>{
+        return myContactsRepository!!.contactsCount()
+    }
 
     fun getContactsForChatFragment(check:String):LiveData<List<MyContacts>>{
         return myContactsRepository!!.getContactsForChatFragment(check)

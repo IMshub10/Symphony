@@ -68,15 +68,12 @@ public class ChatMessageAdapter extends ListAdapter<ChatMessage, ChatMessageAdap
         layoutParams.addRule(RelativeLayout.ALIGN_END);
         holder.chat_item.setLayoutParams(layoutParams);
         if (My_Key.equals(current_message.getSenderKey())){
-            holder.name.setVisibility(View.GONE);
             Drawable drawable = context.getResources().getDrawable(R.drawable.my_message);
             holder.chat_item.setBackground(drawable);
         }else {
-            holder.name.setVisibility(View.VISIBLE);
             Drawable drawable = context.getResources().getDrawable(R.drawable.not_my_message);
             holder.chat_item.setBackground(drawable);
         }
-        holder.name.setText(current_message.getSender());
         holder.message.setText(current_message.getMessagetext());
         String currentTimestamp = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
         long currentTimestamps = Long.parseLong(currentTimestamp);
@@ -92,13 +89,12 @@ public class ChatMessageAdapter extends ListAdapter<ChatMessage, ChatMessageAdap
     }
 
     static class ChatHolder extends RecyclerView.ViewHolder {
-        TextView name, message, date;
+        TextView  message, date;
         LinearLayout chat_item;
 
         public ChatHolder(@NonNull View itemView) {
             super(itemView);
             date = itemView.findViewById(R.id.date);
-            name = itemView.findViewById(R.id.name);
             message = itemView.findViewById(R.id.message);
             chat_item = itemView.findViewById(R.id.chat_item);
         }

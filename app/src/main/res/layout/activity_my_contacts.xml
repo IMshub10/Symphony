@@ -14,7 +14,6 @@
         app:elevation="0dp">
         <androidx.appcompat.widget.Toolbar
             app:title="Select contact"
-            app:subtitle="100 contacts"
             app:subtitleTextColor="@color/white"
             android:id="@+id/toolBar_my_contacts"
             android:background="@color/colorPrimary"

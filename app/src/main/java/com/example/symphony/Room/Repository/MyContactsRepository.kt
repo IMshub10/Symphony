@@ -48,7 +48,13 @@ class MyContactsRepository(application: Application?) {
      fun getAllMyContacts():LiveData<List<MyContacts>>{
         return myContactsDao.getAllMyContacts()
     }
+    fun getFriendContact(key:String):LiveData<MyContacts>{
+        return myContactsDao.getFriendContact(key)
+    }
     fun getContactsForChatFragment(check:String):LiveData<List<MyContacts>>{
         return myContactsDao.getContactsForChatFragment(check)
+    }
+    fun contactsCount():LiveData<Int>{
+        return myContactsDao.contactsCount()
     }
 }

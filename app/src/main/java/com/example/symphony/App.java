@@ -5,6 +5,8 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.os.Build;
 
+import com.squareup.leakcanary.LeakCanary;
+
 public class App extends Application {
     public static final String CHANNEL_1_ID = "channel1";
     public static final String CHANNEL_2_ID = "channel2";
@@ -14,6 +16,14 @@ public class App extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        /*
+        if (LeakCanary.isInAnalyzerProcess(this)){
+            return;
+        }
+        LeakCanary.install(this);
+
+         */
+        //Normal app init code
         createNotificationChannel();
 
     }
@@ -24,9 +34,12 @@ public class App extends Application {
             channel1.setDescription("Back Ground Service");
             NotificationChannel channel2 = new NotificationChannel(CHANNEL_2_ID, "Messaging", NotificationManager.IMPORTANCE_DEFAULT);
             channel1.setDescription("Messaging");
+            NotificationChannel channel3 = new NotificationChannel(CHANNEL_3_ID, "Progress", NotificationManager.IMPORTANCE_DEFAULT);
+            channel1.setDescription("Progress");
             NotificationManager manager = getSystemService(NotificationManager.class);
             manager.createNotificationChannel(channel1);
             manager.createNotificationChannel(channel2);
+            manager.createNotificationChannel(channel3);
         }
     }
 }

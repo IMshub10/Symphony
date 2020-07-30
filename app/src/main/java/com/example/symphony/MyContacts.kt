@@ -64,12 +64,23 @@ class MyContacts : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_my_contacts)
         init()
-        toolbar!!.setNavigationOnClickListener {
-            onBackPressed()
-        }
+        Listeners()
+        //Observers
+
         myContactsViewModel!!.getAllMyContacts().observe(this, Observer { myContactList ->
             myContactsAdapter!!.submitList(myContactList)
         })
+
+        myContactsViewModel!!.contactsCount().observe(this, Observer { count->
+            val sub=  "$count Contacts"
+            toolbar!!.subtitle = sub
+        })
+    }
+
+    fun Listeners(){
+        toolbar!!.setNavigationOnClickListener {
+            onBackPressed()
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -100,11 +111,7 @@ class MyContacts : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>,grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == PERMISSION_READ_CONTACTS) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {

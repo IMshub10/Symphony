@@ -15,6 +15,7 @@ import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.example.symphony.ChatActivity;
 import com.example.symphony.MainActivity;
 import com.example.symphony.R;
 import com.example.symphony.Room.Model.ChatMessage;
@@ -89,14 +90,20 @@ public class FirebaseService extends Service {
                                     Uri notificationRing = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
                                     Ringtone r = RingtoneManager.getRingtone(getApplicationContext(), notificationRing);
                                     r.play();
+                                    Intent notificationIntent1 = new Intent(getApplicationContext(), ChatActivity.class);
+                                    notificationIntent1.putExtra("Friend_Key", Objects.requireNonNull(snapshot.child("SenderKey").getValue()).toString());
+                                    notificationIntent1.putExtra("First_Name", Objects.requireNonNull(snapshot.child("SenderName").getValue()).toString());
+                                    notificationIntent1.putExtra("Last_Name",Objects.requireNonNull(snapshot.child("SenderName").getValue()).toString());
+                                    notificationIntent1.putExtra("Phone",Objects.requireNonNull(snapshot.child("ReceiverPhone").getValue()).toString());
+                                    notificationIntent1.putExtra("Profile_Image",Objects.requireNonNull(snapshot.child("ReceiverImage").getValue()).toString());
+                                    PendingIntent pendingIntent1 = PendingIntent.getActivity(getApplicationContext(), 0, notificationIntent1, 0);
                                     Notification notification1 = new NotificationCompat.Builder(getApplicationContext(), CHANNEL_2_ID)
                                             .setSmallIcon(R.drawable.ic_baseline_photo_camera_24)
                                             .setContentTitle("New Message From " + Objects.requireNonNull(snapshot.child("SenderName").getValue()).toString())
                                             .setContentText(Objects.requireNonNull(snapshot.child("Message").getValue()).toString())
-                                            .setContentIntent(pendingIntent)
+                                            .setContentIntent(pendingIntent1)
                                             .setAutoCancel(true)
                                             .setCategory(NotificationCompat.CATEGORY_MESSAGE)
-                                            .setGroup("ChatMessage")
                                             .build();
 
                                     notificationManagerCompat.notify(2, notification1);
@@ -104,25 +111,19 @@ public class FirebaseService extends Service {
                                     e.printStackTrace();
                                 }
                             }
-
-
                         }
-
                         @Override
                         public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
 
                         }
-
                         @Override
                         public void onChildRemoved(@NonNull DataSnapshot snapshot) {
 
                         }
-
                         @Override
                         public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
 
                         }
-
                         @Override
                         public void onCancelled(@NonNull DatabaseError error) {
 

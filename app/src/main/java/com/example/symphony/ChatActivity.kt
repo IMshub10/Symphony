@@ -45,6 +45,7 @@ class ChatActivity : AppCompatActivity() {
     var Friend_Name: String? = null
     var chatMessageAdapter: ChatMessageAdapter? = null
     var chat_recyclerview: RecyclerView? = null
+
     final val YOU = "You"
     fun FromIntent() {
         Friend_Key = intent!!.getStringExtra("Friend_Key")
@@ -54,7 +55,6 @@ class ChatActivity : AppCompatActivity() {
         Profile_Image = intent!!.getStringExtra("Profile_Image")
         My_Name = LocalUserService.getLocalUserFromPreferences(this).Name
         My_Key = LocalUserService.getLocalUserFromPreferences(this).Key
-        First_Name = Last_Name
     }
 
     fun InitializeViews() {
@@ -108,6 +108,7 @@ class ChatActivity : AppCompatActivity() {
         FromIntent()
         InitialzeAdapterANDViewModels()
         Listeners()
+
 
         //Observers
         chatMessageViewModel!!.getAllChatMessages(Friend_Key!!,My_Key!!)
@@ -169,6 +170,8 @@ class ChatActivity : AppCompatActivity() {
         hashMap.put("ReceiverKey", Friend_Key)
         hashMap.put("ReceiverName", First_Name)
         hashMap.put("Create Date", createDate)
+        hashMap.put("ReceiverPhone",Phone!!)
+        hashMap.put("ReceiverImage",Profile_Image)
         hashMap.put("Message", text)
         hashMap.put("Timestamp", timestamp)
         FirebaseDatabase.getInstance().getReference().child("Users").child(Friend_Key!!)

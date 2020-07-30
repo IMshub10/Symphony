@@ -18,11 +18,17 @@ interface MyContactsDao {
     @Query("Delete From my_contacts_table ")
     fun deleteAllMyContacts()
 
+    @Query("SELECT * FROM  my_contacts_table WHERE `key`=:key")
+    fun getFriendContact(key:String):LiveData<MyContacts>
+
     @Query("SELECT * FROM my_contacts_table ")
     fun getAllMyContacts(): LiveData<List<MyContacts>>
 
     @Query("SELECT * FROM my_contacts_table WHERE lastMessage!=:check ")
     fun getContactsForChatFragment(check:String) :LiveData<List<MyContacts>>
+
+    @Query("SELECT count(*) FROM my_contacts_table ")
+    fun contactsCount():LiveData<Int>
 
     @Query("UPDATE my_contacts_table SET lastMessage=:lastMess,createDate=:createDate,messsageCount=messsageCount+1,timestamp=:timestam WHERE `key`=:askey ")
     fun updateContact(

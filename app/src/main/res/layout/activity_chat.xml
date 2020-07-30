@@ -5,8 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-
     tools:context=".ChatActivity">
+
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbar"
         android:layout_width="match_parent"
@@ -19,11 +19,13 @@
             android:layout_height="?attr/actionBarSize"
             app:layout_scrollFlags="enterAlways"
             app:popupTheme="@style/AppTheme.PopupOverlay">
+
             <ImageView
                 android:id="@+id/toolbar_navigation"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                android:src="@drawable/ic_arrow_back_black_24dp"/>
+                android:src="@drawable/ic_arrow_back_black_24dp" />
+
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/prof_image"
                 android:layout_width="55dp"
@@ -31,11 +33,13 @@
                 android:paddingTop="8dp"
                 android:paddingBottom="8dp"
                 android:src="@drawable/no_profile" />
+
             <LinearLayout
                 android:id="@+id/group_heading"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
+
                 <TextView
                     android:id="@+id/prof_text"
                     android:layout_width="wrap_content"
@@ -45,19 +49,21 @@
             </LinearLayout>
         </androidx.appcompat.widget.Toolbar>
     </com.google.android.material.appbar.AppBarLayout>
+
     <androidx.recyclerview.widget.RecyclerView
-        android:layout_marginTop="?attr/actionBarSize"
         android:id="@+id/chat_recyclerview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/x"
+        android:layout_marginTop="?attr/actionBarSize"
         android:descendantFocusability="blocksDescendants"
-        tools:listitem="@layout/chat_listitem"/>
+        tools:listitem="@layout/chat_listitem" />
+
     <include
         android:id="@+id/x"
-        android:layout_marginBottom="4dp"
         layout="@layout/text_editor"
-        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_width="match_parent"/>
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="4dp" />
 </RelativeLayout>

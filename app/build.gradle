@@ -140,6 +140,9 @@ dependencies {
     //Corner rounded imageviews
     implementation 'com.makeramen:roundedimageview:2.3.0'
 
-
+    //Memory Leak
+    //Leak Canary
+    debugImplementation('com.squareup.leakcanary:leakcanary-android:1.6.2')
+    releaseImplementation('com.squareup.leakcanary:leakcanry-android-no-op:1.6.2')
 }
 

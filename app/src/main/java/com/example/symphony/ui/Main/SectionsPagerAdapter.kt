@@ -18,8 +18,8 @@ class SectionsPagerAdapter(private val context: Context, fm: FragmentManager)
     override fun getItem(position: Int): Fragment {
         var fragment: Fragment? = null
         when (position) {
-            0 -> fragment = chat_fragment.newInstance("Blank Fragment 1", "1")
-            1 -> fragment = status_fragment.newInstance("Blank Fragment 2", "2")
+            0 -> fragment = chat_fragment.newInstance("ChatFragment", "1")
+            1 -> fragment = status_fragment.newInstance("StatusFragment", "2")
         }
         return fragment!!
     }
