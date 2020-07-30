@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SimpleItemAnimator
 import com.bumptech.glide.Glide
 import com.example.symphony.Adapters.ParentRecylerViewAdapter
+import com.example.symphony.MainActivity
 import com.example.symphony.R
 import com.example.symphony.Room.ViewModel.StatusViewModel
 import com.example.symphony.Services.LocalUserService
@@ -109,7 +110,9 @@ class status_fragment : Fragment() {
                     dialogBuilder.setPositiveButton("Delete") { dialog, whichButton ->
                         FirebaseDatabase.getInstance().reference.child("Status").child(My_Key!!)
                             .removeValue()
-                        statusViewModel!!.deleteByKey(status.key)
+                        statusViewModel!!.deleteByKey(My_Key!!)
+                        val intent = Intent(context, MainActivity::class.java)
+                        requireContext().startActivity(intent)
                     }
                     dialogBuilder.setNegativeButton("Cancel") { _, _ ->
 
