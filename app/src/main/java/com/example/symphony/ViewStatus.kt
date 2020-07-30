@@ -26,13 +26,13 @@ class ViewStatus : AppCompatActivity() {
     var Friend_Key: String? = null
     var Status_Image: String? = null
     var Create_Date: String? = null
+    var Message_Status: String? = null
     var statusViewModel: StatusViewModel? = null
     var contactsViewModel: MyContactsViewModel? = null
     var view_status_text: TextView? = null
     var view_status_time_textView: TextView? = null
-
-
-
+    var view_status_message:TextView? = null
+    var countDownTimer:CountDownTimer? = null
 
     fun InitializeViews() {
         back_button = findViewById(R.id.back_button)
@@ -40,6 +40,7 @@ class ViewStatus : AppCompatActivity() {
         status_image = findViewById(R.id.status_image)
         view_status_text = findViewById(R.id.view_status_text)
         view_status_time_textView = findViewById(R.id.view_status_time_textView)
+        view_status_message = findViewById(R.id.view_status_message)
         statusViewModel = ViewModelProvider.AndroidViewModelFactory.getInstance(application)
             .create(StatusViewModel::class.java)
         contactsViewModel = ViewModelProvider.AndroidViewModelFactory.getInstance(application)
@@ -52,6 +53,7 @@ class ViewStatus : AppCompatActivity() {
         Friend_Key = intent.getStringExtra("Friend_Key")
         Status_Image = intent.getStringExtra("Status_Image")
         Create_Date = intent.getStringExtra("Create_Date")
+        Message_Status = intent.getStringExtra("Message_Status")
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -69,6 +71,7 @@ class ViewStatus : AppCompatActivity() {
             .load(Status_Image)
             .into(status_image!!)
         view_status_time_textView!!.text = Create_Date
+        view_status_message!!.text =Message_Status
         getFriendContact()
 
     }
@@ -94,27 +97,25 @@ class ViewStatus : AppCompatActivity() {
         super.onStart()
 
         statusViewModel!!.updateSeen(Friend_Key!!, true)
-        object : CountDownTimer(10000, 10) {
+        countDownTimer =object : CountDownTimer(10000, 10) {
             override fun onTick(l: Long) {
                 progress.progress=(10000-l.toInt())
             }
-            @SuppressLint("SetTextI18n")
             override fun onFinish() {
                 onBackPressed()
             }
         }.start()
 
     }
+
     override fun onStop() {
         super.onStop()
-    }
-
-    override fun onPause() {
-        super.onPause()
+        countDownTimer!!.cancel()
     }
 
     override fun onBackPressed() {
         super.onBackPressed()
+        countDownTimer!!.cancel()
     }
 
     fun Listeners() {
@@ -123,7 +124,5 @@ class ViewStatus : AppCompatActivity() {
         }
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-    }
+
 }

@@ -159,6 +159,7 @@ class CreateStatus : AppCompatActivity(), BSImagePicker.OnSelectImageCancelledLi
                         FirebaseDatabase.getInstance().reference.child("Status").child(My_Key!!)
                             .setValue(hashMap)
                         statusViewModel!!.insert(Status(My_Key!!, My_Name!!,My_Phone!!, it.toString(), text, date,true))
+                        statusViewModel!!.update(Status(My_Key!!, My_Name!!,My_Phone!!, it.toString(), text, date,true))
                     }
                 }.addOnProgressListener {
                     val max: Long = it.totalByteCount

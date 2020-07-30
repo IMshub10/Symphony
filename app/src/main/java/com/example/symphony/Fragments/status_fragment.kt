@@ -100,6 +100,7 @@ class status_fragment : Fragment() {
                     .load(it.imageUrl)
                     .into(my_status_image!!)
                 plus!!.visibility = View.GONE
+                my_status_time_textView!!.text = status.createDate
                 delete_my_status!!.visibility = View.VISIBLE
                 delete_my_status!!.setOnClickListener {
                     val dialogBuilder = AlertDialog.Builder(context)
@@ -122,6 +123,8 @@ class status_fragment : Fragment() {
                     intent.putExtra("Friend_Key", My_Key)
                     intent.putExtra("Status_Image", status.imageUrl)
                     intent.putExtra("Create_Date",status.createDate)
+                    intent.putExtra("Message_Status", status.text_message)
+
                     intent.flags = Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
                     requireContext().startActivity(intent)
                 }

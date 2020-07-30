@@ -68,6 +68,7 @@ public class StatusRecyclerViewAdapter extends ListAdapter<Status, StatusRecycle
                 intent.putExtra("Friend_Key",current_status.getKey());
                 intent.putExtra("Status_Image",current_status.getImageUrl());
                 intent.putExtra("Create_Date",current_status.getCreateDate());
+                intent.putExtra("Message_Status",current_status.getText_message());
                 intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(intent);
             }

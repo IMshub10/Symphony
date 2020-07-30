@@ -58,6 +58,7 @@ public class ParentRecylerViewAdapter extends RecyclerView.Adapter<ParentRecyler
                     if (statuses.size()!= 0) {
                         holder.header.setText(R.string.recent_updates);
                         holder.linear_parent.setVisibility(View.VISIBLE);
+                        holder.header.setVisibility(View.VISIBLE);
                         StatusRecyclerViewAdapter statusRecyclerViewAdapter = new StatusRecyclerViewAdapter(context);
                         holder.recyclerView.setLayoutManager(layoutManager);
                         holder.recyclerView.setAdapter(statusRecyclerViewAdapter);
@@ -67,6 +68,8 @@ public class ParentRecylerViewAdapter extends RecyclerView.Adapter<ParentRecyler
                         statusRecyclerViewAdapter.submitList(statuses);
                     } else {
                         holder.linear_parent.setVisibility(View.GONE);
+                        holder.header.setVisibility(View.GONE);
+
                     }
                 }
             });
@@ -77,6 +80,7 @@ public class ParentRecylerViewAdapter extends RecyclerView.Adapter<ParentRecyler
                     if (statuses.size() != 0) {
                         holder.header.setText(R.string.viewed_updates);
                         holder.linear_parent.setVisibility(View.VISIBLE);
+                        holder.header.setVisibility(View.VISIBLE);
                         StatusRecyclerViewAdapter statusRecyclerViewAdapter = new StatusRecyclerViewAdapter(context);
                         holder.recyclerView.setLayoutManager(layoutManager);
                         holder.recyclerView.setAdapter(statusRecyclerViewAdapter);
@@ -86,6 +90,7 @@ public class ParentRecylerViewAdapter extends RecyclerView.Adapter<ParentRecyler
                         statusRecyclerViewAdapter.submitList(statuses);
                     }else {
                         holder.linear_parent.setVisibility(View.GONE);
+                        holder.header.setVisibility(View.GONE);
                     }
                 }
             });
