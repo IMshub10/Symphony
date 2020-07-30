@@ -23,10 +23,14 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:targetApi="q">
-        <activity android:name=".ViewStatus"></activity>
-        <activity android:name=".CreateStatus" />
-        <activity android:name=".ChatActivity" />
-        <activity android:name=".MyContacts" />
+        <activity android:name=".ViewStatus"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".CreateStatus"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ChatActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".MyContacts"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".Info"
             android:screenOrientation="portrait" />
