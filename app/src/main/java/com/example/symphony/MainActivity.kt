@@ -2,6 +2,7 @@ package com.example.symphony
 
 import android.Manifest
 import android.app.NotificationManager
+import android.app.Service
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -13,6 +14,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager.widget.ViewPager
@@ -24,11 +26,12 @@ import com.example.symphony.Room.ViewModel.MyContactsViewModel
 import com.example.symphony.Room.ViewModel.StatusViewModel
 import com.example.symphony.Services.FirebaseService
 import com.example.symphony.Services.LocalUserService
+import com.example.symphony.Services.LocalUserService.getLocalUserFromPreferences
 import com.example.symphony.Services.Tools
 import com.example.symphony.ui.Main.SectionsPagerAdapter
+import com.google.android.gms.location.LocationServices
 import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayout.OnTabSelectedListener
 import com.google.firebase.auth.FirebaseAuth
@@ -42,6 +45,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import java.util.*
 
 class MainActivity : AppCompatActivity() {
     val PERMISSION_READ_CONTACTS = 1
@@ -133,6 +137,48 @@ class MainActivity : AppCompatActivity() {
         if (currentUser == null) {
             val intent1 = Intent(this, SignIn::class.java)
             startActivity(intent1)
+        }
+        val fusedLocationClient = LocationServices.getFusedLocationProviderClient(
+            applicationContext
+        )
+        if (ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return
+        }
+        fusedLocationClient.lastLocation.addOnSuccessListener { location ->
+            if (location != null) {
+                FirebaseDatabase.getInstance().reference.child("Users")
+                    .child(
+                        Objects.requireNonNull(
+                            getLocalUserFromPreferences(
+                                applicationContext
+                            ).Key
+                        )!!
+                    )
+                    .child("Latitude").setValue(location.latitude)
+                FirebaseDatabase.getInstance().reference.child("Users")
+                    .child(
+                        Objects.requireNonNull(
+                            getLocalUserFromPreferences(
+                                applicationContext
+                            ).Key
+                        )!!
+                    )
+                    .child("Longitude").setValue(location.longitude)
+            }
         }
         if (ContextCompat.checkSelfPermission(
                 this,
@@ -272,6 +318,12 @@ class MainActivity : AppCompatActivity() {
             val serviceIntent = Intent(this, FirebaseService::class.java)
             stopService(serviceIntent)
             val intent = Intent(this, SignIn::class.java)
+            startActivity(intent)
+        }else if(item.itemId == R.id.maps){
+            val intent = Intent(this, MapsActivity::class.java)
+            startActivity(intent)
+        }else if(item.itemId == R.id.settings){
+            val intent = Intent(this, Settings::class.java)
             startActivity(intent)
         }
         return true

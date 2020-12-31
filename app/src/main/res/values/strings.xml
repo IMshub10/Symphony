@@ -33,5 +33,6 @@
     <string name="hi_hello_bonjour_konichiwa">Hi Hello bonjour konichiwa</string>
     <string name="recent_updates">Recent updates</string>
     <string name="viewed_updates">Viewed updates</string>
+    <string name="title_activity_maps">Map</string>
 
 </resources>
